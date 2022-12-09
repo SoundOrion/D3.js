@@ -63,16 +63,24 @@
 
         // Three function that change the tooltip when user hover / move / leave a cell
         const mouseover = function (event, d) {
-            tooltip.style("opacity", 1)
+            tooltip
+                .style("opacity", 1)
+            d3.select(this)
+                .style("stroke", "black")
+                .style("opacity", 1)
         }
         const mousemove = function (event, d) {
             tooltip
-                .html("The exact value of<br>this cell is: " + d.value)
+                .html("The exact value of<br>this cell is: " + d)
                 .style("left", (event.x) / 2 + "px")
                 .style("top", (event.y) / 2 + "px")
         }
-        const mouseleave = function (d) {
-            tooltip.style("opacity", 0)
+        const mouseleave = function (event, d) {
+            tooltip
+                .style("opacity", 0)
+            d3.select(this)
+                .style("stroke", "none")
+                .style("opacity", 0.8)
         }
 
         //Read the data
