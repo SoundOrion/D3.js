@@ -1,0 +1,76 @@
+﻿@page "/fetchdata"
+
+<PageTitle>Weather forecast</PageTitle>
+
+@using BlazorServerAppTimer.Data
+@using System.Timers
+@implements IDisposable
+@inject WeatherForecastService ForecastService
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+@if (forecasts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts)
+            {
+                <tr>
+                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private WeatherForecast[]? forecasts;
+    private Timer timer = new Timer(100);
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+
+        timer.Elapsed += (s, e) =>
+        {
+            InvokeAsync(() =>
+            {
+                for (int i = 0; i < forecasts.Length; i++)
+                {
+                    forecasts[i].TemperatureF = func(forecasts[i].TemperatureC);
+                }
+                this.StateHasChanged();
+            });
+        };
+        timer.Start();
+    }
+
+    public void Dispose()
+    {
+        timer?.Dispose();
+    }
+
+    public double func(double TemperatureC)
+    {
+        int seed = DateTime.Now.Millisecond;
+        Random ri = new Random(seed);
+        return 32 + ri.Next(9999) + (TemperatureC / 0.5556);
+    }
+}

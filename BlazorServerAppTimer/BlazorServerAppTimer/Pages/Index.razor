@@ -1,0 +1,91 @@
+﻿@page "/"
+@using System.Collections.Generic;
+@inject IJSRuntime JsRuntime;
+@using System.Timers
+@implements IDisposable
+
+<PageTitle>Index</PageTitle>
+
+@*<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<meta charset="utf-8">
+<title>Test</title>
+
+<div style="height:800px; width:800px">
+    <canvas id="heatMap" style="height:800px; width:800px"></canvas>
+</div>*@
+
+<h1>D3 heatmap</h1>
+
+<div id="my_dataviz"></div>
+
+
+@code {
+
+    List<double> zList = new List<double>();
+
+    private Timer timer = new(1000);
+
+    //protected override async Task OnAfterRenderAsync(bool firstRender)
+    //{
+    //    if (firstRender)
+    //    {
+    //        Random rnd = new Random(DateTime.Now.Millisecond);
+    //        for (var i = 0; i < 100; i++)
+    //        {
+    //            var value = rnd.Next(0, 100);
+    //            zList.Add(value);
+    //        }
+
+    //        await JsRuntime.InvokeVoidAsync("myD3Helper.setup", zList);
+
+    //        //timer.Elapsed += (sender, eventArgs) => OnTimerCallback();
+    //        //timer.Start();
+    //    }
+    //}
+
+    //private Task OnTimerCallback()
+    //{
+    //    _ = InvokeAsync(() =>
+    //    {
+    //        Random rnd = new Random(DateTime.Now.Millisecond);
+    //        for (var i = 0; i < 100; i++)
+    //        {
+    //            var value = rnd.Next(0, 100);
+    //            zList.Add(value);
+    //        }
+    //        JsRuntime.InvokeVoidAsync("myD3Helper.setup", zList);
+    //        StateHasChanged();
+    //    });
+    //}
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            timer.Elapsed += (s, e) =>
+            {
+                InvokeAsync(() =>
+                {
+                    Random rnd = new Random(DateTime.Now.Millisecond);
+                    for (var i = 0; i < 10000; i++)
+                    {
+                        var value = rnd.Next(0, 100);
+                        zList.Add(value);
+                    }
+                    JsRuntime.InvokeVoidAsync("myD3Helper.setup", zList);
+                    this.StateHasChanged();
+                });
+            };
+            timer.Start();
+        }
+    }
+
+
+    public void Dispose()
+    {
+        timer?.Dispose();
+    }
+}
