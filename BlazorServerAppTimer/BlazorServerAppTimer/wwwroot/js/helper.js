@@ -3,7 +3,7 @@
 
         // set the dimensions and margins of the graph
         const margin = { top: 30, right: 30, bottom: 30, left: 30 },
-            width = 450 - margin.left - margin.right,
+            width = 100 - margin.left - margin.right,
             height = 450 - margin.top - margin.bottom;
 
         // remove
@@ -17,12 +17,12 @@
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        // range generator
-        function* range(start, end) {
-            yield start;
-            if (start === end) return;
-            yield* range(start + 1, end);
-        }
+        //// range generator
+        //function* range(start, end) {
+        //    yield start;
+        //    if (start === end) return;
+        //    yield* range(start + 1, end);
+        //}
 
         // Build X scales and axis:
         const x = d3.scaleBand()
@@ -83,7 +83,7 @@
             .data(data)
             .enter()
             .append("rect")
-            .attr("x", function (d, i) { return x(Math.floor(i / xvalues.length)) })
+            .attr("x", function (d, i) { return x(Math.floor(i / yvalues.length)) })
             .attr("y", function (d, i) { return y(i % yvalues.length) })
             .attr("width", x.bandwidth())
             .attr("height", y.bandwidth())
