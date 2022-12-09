@@ -26,7 +26,7 @@ Welcome to your new app.
 
     List<double> zList = new List<double>();
 
-    private Timer timer = new(1000);
+    private Timer timer = new(100);
 
     //protected override async Task OnAfterRenderAsync(bool firstRender)
     //{
@@ -77,6 +77,11 @@ Welcome to your new app.
                     }
                     JsRuntime.InvokeVoidAsync("myD3Helper.setup", zList);
                     this.StateHasChanged();
+
+                    //Thread.Sleep(100);
+
+                    JsRuntime.InvokeVoidAsync("myD3Helper.remove");
+                    //this.StateHasChanged();
                 });
             };
             timer.Start();

@@ -87,4 +87,8 @@
             .on("mousemove", mousemove)
             .on("mouseleave", mouseleave)
     },
+    remove: function () {
+        d3.select("#my_dataviz").selectAll("svg")
+            .remove();
+    },
 };
