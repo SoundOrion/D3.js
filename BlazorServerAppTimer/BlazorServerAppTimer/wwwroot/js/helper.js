@@ -6,6 +6,9 @@
             width = 450 - margin.left - margin.right,
             height = 450 - margin.top - margin.bottom;
 
+        // remove
+        d3.select("#my_dataviz").selectAll("svg").remove();
+
         // append the svg object to the body of the page
         const svg = d3.select("#my_dataviz")
             .append("svg")
